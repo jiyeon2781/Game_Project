@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public GameObject startCamera;
     public GameObject startPanel;
     public GameObject gamePanel;
+    public MainPlayer player;
     
     void Start()
     {
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public void gameStart()
     {
+        player.isStart = true;
         startCamera.SetActive(false);
         startPanel.SetActive(false);
         gamePanel.SetActive(true);

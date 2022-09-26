@@ -5,30 +5,32 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    private Animator playerAnimator;
+    
     private Animator animator;
-    private GameObject playerObject;
     private Transform target;
 
     private bool deadFlag = false;
     private bool attackFlag = false;
+    private bool isHit; // 플레이어에게 맞을 때
+    private bool isAttack; // 플레이어를 때릴 때
 
-    private Rigidbody rigid;
+    public GameObject playerObject;
+    public MainPlayer player;
 
-
-    public int HP = 100;
-    public Slider HPBar;
-    public Text textName;
-    public float enemySpeed = 2f;
-    public SphereCollider collider;
+    public int damage; // 적이 주는 피해
+    public int HP = 100; // 적의 체력
+    public Slider HPBar; // 적 체력바
+    public Text textName; // 적의 이름
+    public float enemySpeed = 2f; // 적의 스피드
+    public SphereCollider collider; // 적 공격 범위
+    
+    //public Animator playerAnimator;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        playerObject = GameObject.Find("MainPlayer");
-        rigid = playerObject.GetComponent<Rigidbody>();
-        playerAnimator = playerObject.GetComponent<Animator>();
+        //playerAnimator = playerObject.GetComponent<Animator>();
         collider = GetComponent<SphereCollider>();
         animator = GetComponent<Animator>();
         InvokeRepeating("UpdateTarget", 0f, 0.25f); // 타겟이 범위에 들어왔는지 주기적으로 검사
@@ -52,7 +54,6 @@ public class Enemy : MonoBehaviour
                 transform.Translate(direction.normalized * enemySpeed * Time.deltaTime); // 타겟을 향해 이동
             }
             // 타겟을 향해 회전
-            Debug.Log("hi");
             Vector3 dir = target.transform.position - transform.position;
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 5);
             //transform.LookAt(target.transform.position);
@@ -112,10 +113,12 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         collider.enabled = true;
+        isAttack = true;
         yield return new WaitForSeconds(1f);
         collider.enabled = false;
+        isAttack = false;
         yield return new WaitForSeconds(0.5f);
 
     }
@@ -134,11 +137,27 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Sward") && playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        if (other.gameObject.CompareTag("Sward") && player.isAttack && !isHit)
         {
             HP -= 35;
-            Debug.Log("몬스터가 맞았어!");
             animator.SetTrigger("Hit");
+            isHit = true;
+            Invoke("hitOut", 0.5f);
         }
+        else if (other.gameObject.CompareTag("Player") && isAttack && !player.isHit)
+        {
+            player.playerHP -= damage;
+            player.isHit = true;
+            Invoke("playerHitOut", 0.5f);
+        }
+    }
+    void hitOut()
+    {
+        isHit = false;
+    }
+
+    void playerHitOut()
+    {
+        player.isHit = false;
     }
 }

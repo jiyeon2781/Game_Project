@@ -406,7 +406,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\uC2AC\uB77C\uC784\uC744 \uC7A1\uC790!"
+  m_Text: "\uC2AC\uB77C\uC784\uC744 \uC7A1\uC544\uB77C!"
 --- !u!222 &16228733
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2347,6 +2347,7 @@ MonoBehaviour:
   startCamera: {fileID: 1489350524}
   startPanel: {fileID: 1267118768}
   gamePanel: {fileID: 5158742}
+  player: {fileID: 574923825}
 --- !u!1001 &261168983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5345,6 +5346,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &574923825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2370452778053627152, guid: 121263eb33f58704eb89db6f603566db, type: 3}
+  m_PrefabInstance: {fileID: 2370452778073169401}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512496618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e61cf97cab6d54f9e8313c2403477a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &578440388
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10593,6 +10605,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 629542536758681526, guid: 7ca2fa2809968cf47852232e5d4a6e43, type: 3}
   m_PrefabInstance: {fileID: 1344028357}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1346430466 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5045430043935419661, guid: 121263eb33f58704eb89db6f603566db, type: 3}
+  m_PrefabInstance: {fileID: 2370452778073169401}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1350955199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11271,7 +11288,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1489350527}
   - component: {fileID: 1489350526}
-  - component: {fileID: 1489350525}
   m_Layer: 0
   m_Name: Start Camera
   m_TagString: Untagged
@@ -11279,14 +11295,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1489350525
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489350524}
-  m_Enabled: 1
 --- !u!20 &1489350526
 Camera:
   m_ObjectHideFlags: 0
@@ -15899,6 +15907,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1290156458}
     - target: {fileID: 7792128933168102299, guid: 8bb4c90e1410b3249a14665b9d53ac81, type: 3}
+      propertyPath: damage
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7792128933168102299, guid: 8bb4c90e1410b3249a14665b9d53ac81, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 574923825}
+    - target: {fileID: 7792128933168102299, guid: 8bb4c90e1410b3249a14665b9d53ac81, type: 3}
       propertyPath: collider
       value: 
       objectReference: {fileID: 2024734452}
@@ -15906,6 +15922,14 @@ PrefabInstance:
       propertyPath: textName
       value: 
       objectReference: {fileID: 1862219979}
+    - target: {fileID: 7792128933168102299, guid: 8bb4c90e1410b3249a14665b9d53ac81, type: 3}
+      propertyPath: playerObject
+      value: 
+      objectReference: {fileID: 512496618}
+    - target: {fileID: 7792128933168102299, guid: 8bb4c90e1410b3249a14665b9d53ac81, type: 3}
+      propertyPath: playerAnimator
+      value: 
+      objectReference: {fileID: 1346430466}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bb4c90e1410b3249a14665b9d53ac81, type: 3}
 --- !u!135 &2024734452 stripped

@@ -10,17 +10,15 @@ public class MainPlayer : MonoBehaviour
     private Vector2 mouseInput;
 
     private Weapon weapon;
+    public bool isStart; // 게임이 시작됐는지 아닌지
+    public bool isAttack; // 공격하고 있는지 아닌지
+    public bool isHit; // 플레이어가 맞고 있는지 아닌지
 
-    [SerializeField]
-    private float charSpeed = 5.0f; // 캐릭터 속도
-    [SerializeField]
-    private Transform characterBody; // 메인 캐릭터
-    [SerializeField]
-    private Transform cameraArm; // 메인 캐릭터의 카메라
-    [SerializeField]
-    private int playerHP = 100;
-    [SerializeField]
-    private Slider slider;
+    public float charSpeed = 5.0f; // 캐릭터 속도
+    public Transform characterBody; // 메인 캐릭터
+    public Transform cameraArm; // 메인 캐릭터의 카메라
+    public int playerHP = 100;
+    public Slider slider;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +33,7 @@ public class MainPlayer : MonoBehaviour
     {
         Rotate();
         Attack();
+        Health();
     }
 
     private void FixedUpdate() // 이동 관련 함수는 FixedUpdate가 효율이 더 좋다고 함
@@ -44,7 +43,7 @@ public class MainPlayer : MonoBehaviour
 
     void Move()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")) return;
+        if (isAttack) return;
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         // 이동 방향키 입력값 (수평 방향, 수직 방향)
         bool isWalk = moveInput.magnitude != 0; // 이동 방향키 입력 판정 (0보다 크면 입력 발생)
@@ -82,20 +81,25 @@ public class MainPlayer : MonoBehaviour
 
     void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isStart)
         {
             animator.SetTrigger("Attack");
+            isAttack = true;
+            Invoke("AttackOut", 0.5f);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void AttackOut()
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        isAttack = false;
+    }
+
+    void Health()
+    {
+        slider.value = playerHP;
+        if (playerHP <= 0)
         {
-            Debug.Log("아파!");
-            playerHP -= 20;
-            slider.value = playerHP;
-            if (playerHP <= 0) Debug.Log("게임 오버~");
+            Debug.Log("Game Over~");
         }
     }
 }
