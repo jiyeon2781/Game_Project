@@ -6,6 +6,7 @@ public class SlimeAttack : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -13,5 +14,5 @@ public class SlimeAttack : MonoBehaviour
             Debug.Log("몬스터가 때렸어!");
 
         }
-    }
+    }*/
 }
