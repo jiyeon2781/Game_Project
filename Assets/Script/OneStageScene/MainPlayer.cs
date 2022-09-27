@@ -9,23 +9,27 @@ public class MainPlayer : MonoBehaviour
     private Rigidbody rb;
     private Vector2 mouseInput;
 
-    private Weapon weapon;
+    public Weapon weapon;
     public bool isStart; // 게임이 시작됐는지 아닌지
     public bool isAttack; // 공격하고 있는지 아닌지
     public bool isHit; // 플레이어가 맞고 있는지 아닌지
+    public bool isDie = false;
 
     public float charSpeed = 5.0f; // 캐릭터 속도
     public Transform characterBody; // 메인 캐릭터
     public Transform cameraArm; // 메인 캐릭터의 카메라
     public int playerHP = 100;
     public Slider slider;
+    public GameManager manager;
+
+    MeshRenderer[] meshs;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = characterBody.GetComponent<Rigidbody>();
         animator = characterBody.GetComponentInChildren<Animator>();
-        weapon = GetComponent<Weapon>();
+        meshs = GetComponentsInChildren<MeshRenderer>();
     }
 
     // Update is called once per frame
@@ -34,6 +38,7 @@ public class MainPlayer : MonoBehaviour
         Rotate();
         Attack();
         Health();
+        Dead();
     }
 
     private void FixedUpdate() // 이동 관련 함수는 FixedUpdate가 효율이 더 좋다고 함
@@ -43,12 +48,12 @@ public class MainPlayer : MonoBehaviour
 
     void Move()
     {
-        if (isAttack) return;
+        if (isAttack || isDie || !isStart) return;
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         // 이동 방향키 입력값 (수평 방향, 수직 방향)
         bool isWalk = moveInput.magnitude != 0; // 이동 방향키 입력 판정 (0보다 크면 입력 발생)
-        animator.SetBool("isWalk",isWalk); // 애니메이션 세팅
-        
+        animator.SetBool("isWalk", isWalk); // 애니메이션 세팅
+
         if (isWalk)
         {
             Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
@@ -64,6 +69,7 @@ public class MainPlayer : MonoBehaviour
     }
     void Rotate()
     {
+        if (!isStart || isDie) return;
         mouseInput.x = Input.GetAxis("Mouse X"); // 마우스 좌우 수치
         mouseInput.y = Input.GetAxis("Mouse Y"); // 마우스 위아래 수치
         Vector3 camAngle = cameraArm.rotation.eulerAngles;
@@ -85,6 +91,7 @@ public class MainPlayer : MonoBehaviour
         {
             animator.SetTrigger("Attack");
             isAttack = true;
+            weapon.Use();
             Invoke("AttackOut", 0.5f);
         }
     }
@@ -96,10 +103,19 @@ public class MainPlayer : MonoBehaviour
 
     void Health()
     {
-        slider.value = playerHP;
         if (playerHP <= 0)
         {
-            Debug.Log("Game Over~");
+            isDie = true;
         }
     }
+
+    void Dead()
+    {
+        if (!isDie) return;
+        animator.SetTrigger("isDie");
+        manager.gameOver();
+
+    }
+
 }
+
