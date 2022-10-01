@@ -10,16 +10,18 @@ public class GameManager : MonoBehaviour
     public GameObject startPanel;
     public GameObject gamePanel;
     public GameObject overPanel;
+    public GameObject clearPanel;
     public MainPlayer player;
 
     public bool isStart;
-    public int EnemyCount;
-    public GameObject enemyGroup;
+    public int enemyCount;
+    public Transform enemyGroup;
     public Slider playerSlider;
 
     public float playTime;
     public Text playTimeTxt;
     public Text totalTxt;
+    public Text clearTotalTxt;
 
     private int hour, min, second;
 
@@ -32,6 +34,8 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (isStart) playTime += Time.deltaTime;
+        enemyCount = enemyGroup.childCount;
+        if (enemyCount <= 0) gameClear();
     }
 
     private void LateUpdate()
@@ -45,6 +49,7 @@ public class GameManager : MonoBehaviour
             playTimeTxt.text = string.Format("{0:00}", hour) + ":" + string.Format("{0:00}", min) + ":" + string.Format("{0:00}", second);
         }
     }
+
 
     public void reStart()
     {
@@ -60,7 +65,7 @@ public class GameManager : MonoBehaviour
         startPanel.SetActive(false);
         gamePanel.SetActive(true);
 
-        enemyGroup.SetActive(true);
+        enemyGroup.gameObject.SetActive(true);
     }
 
     public void gameOver()
@@ -70,7 +75,16 @@ public class GameManager : MonoBehaviour
         gamePanel.SetActive(false);
         overPanel.SetActive(true);
         
-        totalTxt.text = "와우! " + (hour > 0 ? string.Format("{0:00}", hour) + "시간 " : "") + (min > 0 ? string.Format("{0:00}", min) + "분 " : "") + string.Format("{0:00}", second) + "초나 버텼어요!";
+        totalTxt.text = "와우! " + (hour > 0 ? string.Format("{0}", hour) + "시간 " : "") + (min > 0 ? string.Format("{0}", min) + "분 " : "") + string.Format("{0}", second) + "초나 버텼어요!";
+
+    }
+
+    public void gameClear()
+    {
+        isStart = false;
+        gamePanel.SetActive(false);
+        clearPanel.SetActive(true);
+        clearTotalTxt.text = "대단해요! " + (hour > 0 ? string.Format("{0}", hour) + "시간 " : "") + (min > 0 ? string.Format("{0}", min) + "분 " : "") + string.Format("{0}", second) + "초만에 깼어요!";
 
     }
 

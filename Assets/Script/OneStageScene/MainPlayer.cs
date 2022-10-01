@@ -39,6 +39,7 @@ public class MainPlayer : MonoBehaviour
         Attack();
         Health();
         Dead();
+        Clear();
     }
 
     private void FixedUpdate() // 이동 관련 함수는 FixedUpdate가 효율이 더 좋다고 함
@@ -115,6 +116,15 @@ public class MainPlayer : MonoBehaviour
         animator.SetTrigger("isDie");
         manager.gameOver();
 
+    }
+
+    void Clear()
+    {
+        if (manager.enemyCount <= 0 && isStart)
+        {
+            isStart = false;
+            animator.SetTrigger("doClear");
+        }
     }
 
 }

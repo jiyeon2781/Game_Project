@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
 
     private void TargetConfirm() // 타겟 설정
     {
-        if (player.isDie) return;
+        if (player.isDie || isDead) return;
         if (target != null && !isDead) // 타겟이 존재할 때
         {
             if (!isAttack)
@@ -79,6 +79,8 @@ public class Enemy : MonoBehaviour
 
     private void HPMark()
     {
+        if (isDead) return;
+
         if (player.isDie)
         {
             animator.SetBool("Attack", false);
@@ -97,7 +99,6 @@ public class Enemy : MonoBehaviour
             if (distance < 1.0f)
             {
                 animator.SetBool("Attack", true);
-                StopCoroutine(Attack());
                 StartCoroutine(Attack());
             }
             else
@@ -116,7 +117,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.4f);
         collider.enabled = true;
         isAttack = true;
         yield return new WaitForSeconds(1f);
@@ -140,14 +141,14 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Sward") && player.isAttack && !isHit) // 플레이어에게 맞았을 때
+        if (other.gameObject.CompareTag("Sward") && player.isAttack && !isHit && !isDead) // 플레이어에게 맞았을 때
         {
             HP -= 35;
             animator.SetTrigger("Hit");
             isHit = true;
             Invoke("hitOut", 1f);
         }
-        else if (other.gameObject.CompareTag("Player") && isAttack && !player.isHit) // 플레이어를 때렸을 때 
+        else if (other.gameObject.CompareTag("Player") && isAttack && !player.isHit && !isDead) // 플레이어를 때렸을 때 
         {
             player.playerHP -= damage;
             player.isHit = true;
