@@ -104,10 +104,7 @@ public class MainPlayer : MonoBehaviour
 
     void Health()
     {
-        if (playerHP <= 0)
-        {
-            isDie = true;
-        }
+        if (playerHP <= 0) isDie = true;
     }
 
     void Dead()

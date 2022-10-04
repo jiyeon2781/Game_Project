@@ -74,7 +74,6 @@ public class Enemy : MonoBehaviour
                 else target = null;
             }
         }
-
     }
 
     private void HPMark()
